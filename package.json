@@ -1,0 +1,16 @@
+{
+  "name": "autobacktests",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "main": "tsc src/Main.ts --outDir ./dist/ && node ./dist/main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@mathieuc/tradingview": "^3.4.1",
+    "@notionhq/client": "^2.2.8",
+    "typescript": "^5.1.6"
+  }
+}
