@@ -17,6 +17,7 @@ export default class Notion {
     public async cleanDatabase() {
         const query = await this.query()
 
+        this.database = query["results"];
         if (this.settings.sort_database)
             await this.sortDatabase(query)
     }
@@ -51,7 +52,6 @@ export default class Notion {
                 tmp--;
             });
         }
-        this.database = query["results"];
         while(tmp != 0) {}
     }
 
@@ -60,7 +60,7 @@ export default class Notion {
             database_id: this.database_id,
             sorts: [
                 {
-                    property: "Date",
+                    property: this.settings.date_row,
                     direction: "ascending",
                 },
             ],
