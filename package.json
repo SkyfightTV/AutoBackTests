@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "main": "tsc src/Main.ts --outDir ./dist/ && node ./dist/main.js"
+    "main": "npx ts-node src/Main.ts"
   },
   "keywords": [],
   "author": "",
