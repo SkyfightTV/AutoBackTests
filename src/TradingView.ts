@@ -118,12 +118,22 @@ export default class TV {
     }
 
     private formatName(name : string) {
-        let result = name.replace(/[0-9]/g, '').replace('!', '').substring(0, 2);
+        let result = name
+          .replace(/[0-9]/g, '')
+          .replace('!', '')
+          .replace('/', '')
+          .substring(0, 2);
 
-        if (result === 'EURJPY') {
-            result = 'EJ';
-        } else if (result === 'USDJPY') {
-            result = 'UJ';
+        switch (result) {
+            case 'EURJPY':
+                result = 'EJ';
+                break;
+            case 'USDJPY':
+                result = 'EJ';
+                break;
+            case 'BH':
+                result = 'GU';
+                break;
         }
         return result;
     }
