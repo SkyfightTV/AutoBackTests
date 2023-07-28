@@ -8,7 +8,7 @@ const notion = new Notion(
   auth.notion_auth,
   auth.database_id,
   new NotionSettings(
-    false
+    true
   )
 );
 const tv = new TV(

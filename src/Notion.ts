@@ -19,12 +19,12 @@ export default class Notion {
 
         this.database = query["results"];
         if (this.settings.sort_database)
-            await this.sortDatabase(query)
+            this.sortDatabase(query).then(() => {
+                console.log("Database cleaned")
+            })
     }
 
-    private sortDatabase(query : QueryDatabaseResponse) {
-        let tmp = 0;
-
+    private async sortDatabase(query : QueryDatabaseResponse) {
         console.log("Cleaning database")
         for (let i = 0; i < query["results"].length; i++) {
             const element : any = query["results"][i];
@@ -47,14 +47,9 @@ export default class Notion {
             };
             if (element["properties"][this.settings.id_row]["title"][0]["text"]["content"] === `${i + 1}`)
                 continue
-            tmp++;
-            this.notion.request(clean_post).then(r => {
-                console.log("Cleaned n°" + i)
-                tmp--;
-            });
+            await this.notion.request(clean_post);
+            console.log("Cleaned n°" + i)
         }
-        while(tmp != 0) {}
-        console.log("Database cleaned")
     }
 
     private async query() {
