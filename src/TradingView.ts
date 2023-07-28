@@ -34,25 +34,29 @@ export default class TV {
         if (draw.serverUpdateTime < this.date.getTime())
             return;
 
-        if (this.draws.has(draw.id)) {
-            const pos = this.draws.get(draw.id);
-            if (!pos) {
-                console.log("Error: pos is null")
-                return;
+        try {
+            if (this.draws.has(draw.id)) {
+                const pos = this.draws.get(draw.id);
+                if (!pos) {
+                    console.log("Error: pos is null")
+                    return;
+                }
+                pos.update(draw);
+                if (pos.need_update) {
+                    this.updatePosition(pos, notion).then(() => {
+                        console.log("Updated position")
+                    });
+                    pos.need_update = false;
+                }
+            } else {
+                const pos = new Position(draw)
+                this.draws.set(draw.id, pos);
+                this.createPosition(pos, notion).then(() => {
+                    console.log("Created position")
+                })
             }
-            pos.update(draw);
-            if (pos.need_update) {
-                this.updatePosition(pos, notion).then(() => {
-                    console.log("Updated position")
-                });
-                pos.need_update = false;
-            }
-        } else {
-            const pos = new Position(draw)
-            this.draws.set(draw.id, pos);
-            this.createPosition(pos, notion).then(() => {
-                console.log("Created position")
-            })
+        } catch (e) {
+            console.log(e)
         }
     }
 
