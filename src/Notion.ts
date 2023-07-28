@@ -25,6 +25,7 @@ export default class Notion {
     private sortDatabase(query : QueryDatabaseResponse) {
         let tmp = 0;
 
+        console.log("Cleaning database")
         for (let i = 0; i < query["results"].length; i++) {
             const element : any = query["results"][i];
             let clean_post : any = {
@@ -53,9 +54,11 @@ export default class Notion {
             });
         }
         while(tmp != 0) {}
+        console.log("Database cleaned")
     }
 
     private async query() {
+        console.log("Starting notion");
         let query_post : any = {
             database_id: this.database_id,
             sorts: [

@@ -16,6 +16,7 @@ export default class TV {
     }
 
     public async start(notion : Notion) {
+        console.log("Start trading view")
         this.user = await TradingView.getUser(this.session_id, this.session_id_sign);
         setInterval(async () => {
             const drawings : Record<string, any> = await TradingView.getDrawings(this.layout_id, "", {
