@@ -5,14 +5,12 @@ const TradingView = require("@mathieuc/tradingview");
 export default class TV {
     private readonly date: Date;
     private readonly draws: Map<string, Position>;
-    private readonly draws_skip: Position[];
 
     public user: any;
 
     constructor(private readonly session_id : string, private readonly session_id_sign : string, private readonly layout_id : string) {
         this.date = new Date();
         this.draws = new Map<string, Position>();
-        this.draws_skip = [];
     }
 
     public async start(notion : Notion) {
@@ -69,7 +67,8 @@ export default class TV {
             properties: {
                 [notion.settings.date_row]: {
                     date: {
-                        start: new Date(position.current.points[0]['time_t'] * 1000 - 4 * 60 * 60000).toISOString().split('.')[0] + '+02:00',
+                        start: new Date(position.current.points[0]['time_t'] * 1000 - 5 * 60 * 60000).toISOString().split('.')[0],
+                        time_zone: "Europe/Paris",
                     }
                 },
                 [notion.settings.position_row]: {
@@ -82,6 +81,7 @@ export default class TV {
                 }
             }
         };
+        // @ts-ignore
         await notion.notion.pages.update(query_post);
     }
 
@@ -107,7 +107,8 @@ export default class TV {
                 },
                 [notion.settings.date_row]: {
                     date: {
-                        start: new Date(position.draw.points[0]['time_t'] * 1000 - 4 * 60 * 60000).toISOString().split('.')[0] + '+02:00',
+                        start: new Date(position.draw.points[0]['time_t'] * 1000 - 5 * 60 * 60000).toISOString().split('.')[0],
+                        time_zone: "Europe/Paris"
                     }
                 },
                 [notion.settings.position_row]: {
@@ -117,6 +118,7 @@ export default class TV {
                 }
             }
         }
+        // @ts-ignore
         await notion.notion.pages.create(query_post).then(value => {
             position.notion_id = value.id;
         });
@@ -124,20 +126,34 @@ export default class TV {
 
     private formatName(name : string) {
         let result = name
-          .replace(/[0-9]/g, '')
-          .replace('!', '')
-          .replace('/', '')
-          .substring(0, 2);
 
+        if (result[0] === '6') {
+            result = result.substring(0, 2);
+            switch (result) {
+                case '6E':
+                    result = 'EU';
+                    break;
+                case '6J':
+                    result = 'UJ';
+                    break;
+                case '6B':
+                    result = 'GU';
+                    break;
+                case '6A':
+                    result = 'AU';
+                    break;
+                case '6C':
+                    result = 'CU';
+                    break;
+            }
+            return result;
+        }
         switch (result) {
             case 'EURJPY':
                 result = 'EJ';
                 break;
             case 'USDJPY':
-                result = 'EJ';
-                break;
-            case 'BH':
-                result = 'GU';
+                result = 'UJ';
                 break;
         }
         return result;

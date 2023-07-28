@@ -14,7 +14,7 @@ function createTVSession() {
                 auth["session_id"] = user.session;
                 auth["session_id_sign"] = user.sign;
                 console.log("Created new trading view session")
-                fs.writeFileSync("./src/Auth.json", JSON.stringify(auth, null, 4));
+                fs.writeFileSync("./src/Auth.json", JSON.stringify(auth, null, 2));
             });
         } else
             throw new Error("No session id or sign provided")
