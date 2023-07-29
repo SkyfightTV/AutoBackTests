@@ -18,19 +18,15 @@ export default class Position {
         const price = this.getPrice(draw['points']);
 
         if (price[1] != this.price[1] || price[0] != this.price[0]) {
-            console.log("Price changed")
             return true;
         }
         if (this.current.state.profitLevel != state.profitLevel) {
-            console.log("Profit level changed")
             return true;
         }
         if (this.current.state.stopLevel != state.stopLevel) {
-            console.log("Stop level changed")
             return true;
         }
         if (this.current.state.risk != state.risk){
-            console.log("Risk level changed")
             return true;
         }
         return false;
