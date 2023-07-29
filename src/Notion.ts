@@ -28,6 +28,8 @@ export default class Notion {
         console.log("Cleaning database")
         for (let i = 0; i < query["results"].length; i++) {
             const element : any = query["results"][i];
+            if (element === undefined || element["id"] === undefined)
+                continue
             let clean_post : any = {
                 path: `pages/${element["id"]}`,
                 method: "PATCH",
