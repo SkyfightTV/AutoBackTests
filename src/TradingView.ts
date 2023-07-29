@@ -17,13 +17,17 @@ export default class TV {
         console.log("Start trading view")
         this.user = await TradingView.getUser(this.session_id, this.session_id_sign);
         setInterval(async () => {
-            const drawings : Record<string, any> = await TradingView.getDrawings(this.layout_id, "", {
-                session: this.user.session,
-                id: this.user.id,
-            });
+            try {
+                const drawings: Record<string, any> = await TradingView.getDrawings(this.layout_id, "", {
+                    session: this.user.session,
+                    id: this.user.id,
+                });
 
-            // @ts-ignore
-            drawings.map(processDrawing => this.processDrawings(processDrawing, notion));
+                // @ts-ignore
+                drawings.map(processDrawing => this.processDrawings(processDrawing, notion));
+            } catch (e) {
+                console.log(e)
+            }
         }, 3000);
     }
 
