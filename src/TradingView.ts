@@ -40,12 +40,11 @@ export default class TV {
                     console.log("Error: pos is null")
                     return;
                 }
-                pos.update(draw);
-                if (pos.need_update) {
+                if (pos.needUpdate(draw)) {
+                    pos.update(draw);
                     this.updatePosition(pos, notion).then(() => {
                         console.log("Updated position")
                     });
-                    pos.need_update = false;
                 }
             } else {
                 const pos = new Position(draw)
@@ -67,13 +66,8 @@ export default class TV {
             properties: {
                 [notion.settings.date_row]: {
                     date: {
-                        start: new Date(position.current.points[0]['time_t'] * 1000 - 4 * 60 * 60000).toISOString().split('.')[0],
+                        start: new Date(position.current.points[0]['time_t'] * 1000 - 5 * 60 * 60000).toISOString().split('.')[0],
                         time_zone: "Europe/Paris",
-                    }
-                },
-                [notion.settings.position_row]: {
-                    select: {
-                        name: position.draw.type === 'LineToolRiskRewardShort' ? 'SHORT' : 'LONG',
                     }
                 },
                 [notion.settings.r_row]: {
@@ -104,12 +98,6 @@ export default class TV {
                     select: {
                         name: this.formatName(position.draw.symbol.split(':')[1]),
                     },
-                },
-                [notion.settings.date_row]: {
-                    date: {
-                        start: new Date(position.draw.points[0]['time_t'] * 1000 - 4 * 60 * 60000).toISOString().split('.')[0],
-                        time_zone: "Europe/Paris"
-                    }
                 },
                 [notion.settings.position_row]: {
                     select: {
