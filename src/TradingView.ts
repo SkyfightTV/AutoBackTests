@@ -67,7 +67,7 @@ export default class TV {
             properties: {
                 [notion.settings.date_row]: {
                     date: {
-                        start: new Date(position.current.points[0]['time_t'] * 1000 - 5 * 60 * 60000).toISOString().split('.')[0],
+                        start: new Date(position.current.points[0]['time_t'] * 1000 - 4 * 60 * 60000).toISOString().split('.')[0],
                         time_zone: "Europe/Paris",
                     }
                 },
@@ -107,7 +107,7 @@ export default class TV {
                 },
                 [notion.settings.date_row]: {
                     date: {
-                        start: new Date(position.draw.points[0]['time_t'] * 1000 - 5 * 60 * 60000).toISOString().split('.')[0],
+                        start: new Date(position.draw.points[0]['time_t'] * 1000 - 4 * 60 * 60000).toISOString().split('.')[0],
                         time_zone: "Europe/Paris"
                     }
                 },
