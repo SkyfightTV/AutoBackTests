@@ -35,22 +35,20 @@ export default class Position {
     }
 
     private getStatus(points : Record<string, any>) {
-        const entry = points[0]['price'];
-        let last = points[points.length - 1]['price'];
+        const length = Math.pow(10, points[0]['price'].toString().length - 2);
+        const entry = Math.round(points[0]['price'] * length) / length;
+        const last = Math.round(points[points.length - 1]['price'] * length) / length;
         let status = 0;
 
         if (last != entry) {
-            const price =  Math.round(last * 10000) / 10000
-            const f_price =  Math.round(entry * 10000) / 10000;
-
             if (this.type) {
-                if (price > f_price) {
+                if (last > entry) {
                     status = 1;
                 } else {
                     status = 2;
                 }
             } else {
-                if (price < f_price) {
+                if (last < entry) {
                     status = 1;
                 } else {
                     status = 2;
