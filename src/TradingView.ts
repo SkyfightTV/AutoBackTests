@@ -47,9 +47,13 @@ export default class TV {
                 }
                 if (pos.needUpdate(draw)) {
                     pos.update(draw);
-                    this.updatePosition(pos, notion).then(() => {
-                        console.log("Updated position")
-                    });
+                    try {
+                        this.updatePosition(pos, notion).then(() => {
+                            console.log("Updated position")
+                        });
+                    } catch (e) {
+                        console.log(e)
+                    }
                 }
             } else {
                 const pos = new Position(draw)
