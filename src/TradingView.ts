@@ -1,5 +1,6 @@
 import Notion from "./Notion";
 import Position from "./Position";
+import * as moment from 'moment-timezone';
 const TradingView = require("@mathieuc/tradingview");
 
 export default class TV {
@@ -65,12 +66,16 @@ export default class TV {
     private async updatePosition(position : Position, notion : Notion){
         if (position.notion_id === "")
             return;
+        let date = new Date(position.current.points[0]['time_t'] * 1000 - 4 * 60 * 60000);
+        if (! moment.tz(date, 'America/New_York').isDST()) {
+            date.setTime(date.getTime() - 60 * 60000);
+        }
         const query_post = {
             page_id: position.notion_id,
             properties: {
                 [notion.settings.date_row]: {
                     date: {
-                        start: new Date(position.current.points[0]['time_t'] * 1000 - 4 * 60 * 60000).toISOString().split('.')[0],
+                        start: date.toISOString().split('.')[0],
                         time_zone: "Europe/Paris",
                     }
                 },
@@ -113,6 +118,9 @@ export default class TV {
         // @ts-ignore
         await notion.notion.pages.create(query_post).then(value => {
             position.notion_id = value.id;
+            this.updatePosition(position, notion).then(() => {
+                console.log("Updated position")
+            });
         });
     }
 
