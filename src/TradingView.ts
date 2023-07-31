@@ -70,16 +70,19 @@ export default class TV {
     private async updatePosition(position : Position, notion : Notion){
         if (position.notion_id === "")
             return;
-        let date = new Date(position.current.points[0]['time_t'] * 1000 - 4 * 60 * 60000);
-        if (! moment.tz(date, 'America/New_York').isDST()) {
-            date.setTime(date.getTime() - 60 * 60000);
+        const points = position.current.points;
+        let start_date = new Date(points[0]['time_t'] * 1000 - 4 * 60 * 60000);
+        let end_date = new Date(points[points.length - 1]['time_t'] * 1000 - 4 * 60 * 60000);
+        if (!moment.tz(start_date, 'America/New_York').isDST()) {
+            start_date.setTime(start_date.getTime() - 60 * 60000);
+            end_date.setTime(end_date.getTime() - 60 * 60000);
         }
         const query_post = {
             page_id: position.notion_id,
             properties: {
                 [notion.settings.date_row]: {
                     date: {
-                        start: date.toISOString().split('.')[0],
+                        start: start_date.toISOString().split('.')[0],
                         time_zone: "Europe/Paris",
                     }
                 },
@@ -88,6 +91,10 @@ export default class TV {
                 }
             }
         };
+        if (end_date.getTime() > start_date.getTime()) {
+            // @ts-ignore
+            query_post.properties[notion.settings.date_row].date["end"] = end_date.toISOString().split('.')[0];
+        }
         // @ts-ignore
         await notion.notion.pages.update(query_post);
     }
