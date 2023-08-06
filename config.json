@@ -1,0 +1,20 @@
+{
+  "database": {
+    "id": "",
+    "sort": true,
+    "columns": {
+      "id": "Trade Number",
+      "date": "Date",
+      "pair": "Pair",
+      "position": "Position",
+      "reward": "R"
+    }
+  },
+  "tradingView": {
+    "layoutId": "",
+    "session": {
+      "id": "",
+      "sign": ""
+    }
+  }
+}
