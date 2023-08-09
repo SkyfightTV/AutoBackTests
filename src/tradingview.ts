@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import https from 'https';
+import config from '../config.json' assert { type: 'json' };
 import Position from './position.js';
 
 interface TVUser {
@@ -87,6 +88,10 @@ class FormData {
   }
 }
 
+const tradingViewFullDomain = `${
+  config.tradingView.locale ?? 'www'
+}.tradingview.com`;
+
 export async function loginUser(
   username: string,
   password: string,
@@ -99,10 +104,10 @@ export async function loginUser(
   const { data, cookies } = await request<{ error: string }>(
     {
       method: 'POST',
-      host: 'www.tradingview.com',
+      host: tradingViewFullDomain,
       path: '/accounts/signin/',
       headers: {
-        referer: 'https://www.tradingview.com',
+        referer: `https://${tradingViewFullDomain}`,
         'Content-Type': `multipart/form-data; boundary=${formData.boundary}`,
         'User-Agent': 'TVAPI/1.0',
       },
@@ -133,7 +138,7 @@ export async function getChartToken(
   sessionSignature: string,
 ): Promise<string> {
   const { data } = await request<{ token: string }>({
-    host: 'www.tradingview.com',
+    host: tradingViewFullDomain,
     path: `/chart-token/?image_url=${layoutId}&user_id=${userId}`,
     headers: {
       cookie: `sessionid=${sessionId};sessionid_sign=${sessionSignature};`,
@@ -186,7 +191,7 @@ export async function getUser(
   return new Promise((cb, err) => {
     https
       .get(
-        'https://www.tradingview.com/',
+        `https://${tradingViewFullDomain}/`,
         {
           headers: {
             cookie: `sessionid=${sessionId};sessionid_sign=${sessionSignature};`,

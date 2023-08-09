@@ -12,6 +12,7 @@
   },
   "tradingView": {
     "layoutId": "",
+    "locale": null,
     "session": {
       "id": "",
       "sign": ""
