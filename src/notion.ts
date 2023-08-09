@@ -145,6 +145,10 @@ export default class Notion {
           return cmeName;
       }
     }
+    const match = /([A-Z0-9]+)[A-Z][0-9]{4}/g.exec(name);
+    if (match !== null && match.length > 1) {
+      return match[1];
+    }
     switch (name) {
       case 'EURJPY':
         return 'EJ';
